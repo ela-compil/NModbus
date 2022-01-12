@@ -280,12 +280,22 @@ namespace NModbus.UnitTests.Message
         }
 
         [Fact]
+        public void CreateModbusMessageReadFileRecordRequest()
+        {
+            var request =
+                ModbusMessageFactory.CreateModbusMessage<ReadFileRecordRequest>(new byte[]
+                { 17, ModbusFunctionCodes.ReadFileRecord, 7, 6, 0, 1, 0, 2, 0, 1 });
+            var expectedRequest = new ReadFileRecordRequest(17, 1, 2, 1);
+            ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedRequest, request);
+        }
+
+        [Fact]
         public void CreateModbusMessageWriteFileRecordRequest()
         {
             var request =
                 ModbusMessageFactory.CreateModbusMessage<WriteFileRecordRequest>(new byte[]
                 { 17, ModbusFunctionCodes.WriteFileRecord, 9, 6, 0, 1, 0, 2, 0, 1, 1, 2 });
-            var expectedRequest = new WriteFileRecordRequest(17, new FileRecordCollection(1, 2, new byte[] { 1, 2 }));
+            var expectedRequest = new WriteFileRecordRequest(17, new FileRecordDataCollection(1, 2, new byte[] { 1, 2 }));
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedRequest, request);
         }
 

@@ -1,43 +1,34 @@
 ﻿using NModbus.Data;
-using System;
 using Xunit;
 
 namespace NModbus.UnitTests.Data
 {
     public class FileRecordCollectionFixture
     {
-        [Fact]
-        public void Constructor_ThrowsOddByteCount()
-        {
-            Assert.Throws<FormatException>(() => new FileRecordCollection(1, 2, new byte[] { 1, 2, 3 }));
-        }
+        private protected virtual FileRecordCollection FileRecordCollection => new FileRecordCollection(1, 2, 2);
 
         [Fact]
-        public void ByteCount()
+        public virtual void ByteCount()
         {
-            var col = new FileRecordCollection(1, 2, new byte[] { 1, 2, 3, 4 });
-            Assert.Equal(11, col.ByteCount);
+            Assert.Equal(7, FileRecordCollection.ByteCount);
         }
 
         [Fact]
         public void FileNumber()
         {
-            var col = new FileRecordCollection(1, 2, new byte[] { 1, 2, 3, 4 });
-            Assert.Equal(1, col.FileNumber);
+            Assert.Equal(1, FileRecordCollection.FileNumber);
         }
 
         [Fact]
         public void StartingAdress()
         {
-            var col = new FileRecordCollection(1, 2, new byte[] { 1, 2, 3, 4 });
-            Assert.Equal(2, col.StartingAddress);
+            Assert.Equal(2, FileRecordCollection.RecordNumber);
         }
 
         [Fact]
-        public void NetworkBytes()
+        public virtual void NetworkBytes()
         {
-            var col = new FileRecordCollection(1, 3, new byte[] { 1, 2, 3,4  });
-            Assert.Equal(new byte[] { 6, 0, 1, 0, 3, 0, 2, 1, 2, 3, 4 }, col.NetworkBytes);
+            Assert.Equal(new byte[] { 6, 0, 1, 0, 2, 0, 2 }, FileRecordCollection.NetworkBytes);
         }
     }
 }

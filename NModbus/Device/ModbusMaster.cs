@@ -368,20 +368,37 @@ namespace NModbus.Device
             return PerformReadRegistersAsync(request);
         }
 
-        /// <summary>
-        /// Write a file record to the device.
-        /// </summary>
-        /// <param name="slaveAdress">Address of device to write values to</param>
-        /// <param name="fileNumber">The Extended Memory file number</param>
-        /// <param name="startingAddress">The starting register address within the file</param>
-        /// <param name="data">The data to be written</param>
-        public void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort startingAddress, byte[] data)
+        /// <inheritdoc />
+        public byte[] ReadFileRecord(byte slaveAddress, ushort fileNumber, ushort recordNumber, ushort recordLength)
+        {
+            var request = new ReadFileRecordRequest(slaveAddress, fileNumber, recordNumber, recordLength);
+            
+            var response = Transport.UnicastMessage<WriteFileRecordResponse>(request);
+
+            return response.Data.DataBytes.ToArray();
+        }
+
+        /// <inheritdoc />
+        public Task<byte[]> ReadFileRecordAsync(
+            byte slaveAddress, ushort fileNumber, ushort recordNumber, ushort recordLength)
+        {
+            return Task.Run(() => ReadFileRecord(slaveAddress, fileNumber, recordNumber, recordLength));
+        }
+
+        /// <inheritdoc />
+        public void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort recordNumber, byte[] data)
         {
             ValidateMaxData("data", data, 244);
-            var request = new WriteFileRecordRequest(slaveAdress, new FileRecordCollection(
-                fileNumber, startingAddress, data));
+            var request = new WriteFileRecordRequest(slaveAdress, new FileRecordDataCollection(
+                fileNumber, recordNumber, data));
 
             Transport.UnicastMessage<WriteFileRecordResponse>(request);
+        }
+
+        /// <inheritdoc />
+        public Task WriteFileRecordAsync(byte slaveAdress, ushort fileNumber, ushort recordNumber, byte[] data)
+        {
+            return Task.Run(() => WriteFileRecord(slaveAdress, fileNumber, recordNumber, data));
         }
 
         /// <summary>

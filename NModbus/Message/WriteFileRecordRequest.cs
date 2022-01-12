@@ -1,23 +1,16 @@
 ﻿using NModbus.Data;
-using NModbus.Unme.Common;
-using NModbus.Utility;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NModbus.Message
 {
-    internal class WriteFileRecordRequest : AbstractModbusMessageWithData<FileRecordCollection>, IModbusRequest
+    internal class WriteFileRecordRequest : AbstractModbusMessageWithData<FileRecordDataCollection>, IModbusRequest
     {
         public WriteFileRecordRequest()
         {
         }
 
-        public WriteFileRecordRequest(byte slaveAdress, FileRecordCollection data)
+        public WriteFileRecordRequest(byte slaveAdress, FileRecordDataCollection data)
             : base(slaveAdress, ModbusFunctionCodes.WriteFileRecord)
         {
             Data = data;
@@ -42,9 +35,9 @@ namespace NModbus.Message
                 throw new IOException(msg);
             }
 
-            if (Data.StartingAddress != typedResponse.Data.StartingAddress)
+            if (Data.RecordNumber != typedResponse.Data.RecordNumber)
             {
-                string msg = $"Unexpected starting address in response. Expected {Data.StartingAddress}, received {typedResponse.Data.StartingAddress}.";
+                string msg = $"Unexpected starting address in response. Expected {Data.RecordNumber}, received {typedResponse.Data.RecordNumber}.";
                 throw new IOException(msg);
             }
         }
@@ -57,12 +50,12 @@ namespace NModbus.Message
             }
 
             ByteCount = frame[2];
-            Data = new FileRecordCollection(frame);
+            Data = new FileRecordDataCollection(frame);
         }
 
         public override string ToString()
         {
-            string msg = $"Write {Data.DataBytes.Count} bytes for file {Data.FileNumber} starting at address {Data.StartingAddress}.";
+            string msg = $"Write {Data.DataBytes.Count} bytes for file {Data.FileNumber} starting at address {Data.RecordNumber}.";
             return msg;
         }
     }

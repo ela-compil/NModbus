@@ -187,13 +187,42 @@ namespace NModbus
             ushort[] writeData);
 
         /// <summary>
+        /// Read a file record from the device
+        /// </summary>
+        /// <param name="slaveAddress">Address of the device to read values from</param>
+        /// <param name="fileNumber">The Extended Memory file number</param>
+        /// <param name="recordNumber">The starting register address within the file</param>
+        /// <param name="recordLength">Number of registers to read</param>
+        /// <returns>Plain data as received from the device</returns>
+        byte[] ReadFileRecord(byte slaveAddress, ushort fileNumber, ushort recordNumber, ushort recordLength);
+
+        /// <summary>
+        /// Read a file record from the device
+        /// </summary>
+        /// <param name="slaveAddress">Address of the device to read values from</param>
+        /// <param name="fileNumber">The Extended Memory file number</param>
+        /// <param name="recordNumber">The starting register address within the file</param>
+        /// <param name="recordLength">Number of registers to read</param>
+        /// <returns>Plain data as received from the device</returns>
+        Task<byte[]> ReadFileRecordAsync(byte slaveAddress, ushort fileNumber, ushort recordNumber, ushort recordLength);
+
+        /// <summary>
         /// Write a file record to the device.
         /// </summary>
-        /// <param name="slaveAdress">Address of device to write values to</param>
+        /// <param name="slaveAdress">Address of the device to write values to</param>
         /// <param name="fileNumber">The Extended Memory file number</param>
-        /// <param name="startingAddress">The starting register address within the file</param>
+        /// <param name="recordNumber">The starting register address within the file</param>
         /// <param name="data">The data to be written</param>
-        void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort startingAddress, byte[] data);
+        void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort recordNumber, byte[] data);
+
+        /// <summary>
+        /// Write a file record to the device.
+        /// </summary>
+        /// <param name="slaveAdress">Address of the device to write values to</param>
+        /// <param name="fileNumber">The Extended Memory file number</param>
+        /// <param name="recordNumber">The starting register address within the file</param>
+        /// <param name="data">The data to be written</param>
+        Task WriteFileRecordAsync(byte slaveAdress, ushort fileNumber, ushort recordNumber, byte[] data);
 
         /// <summary>
         ///    Executes the custom message.

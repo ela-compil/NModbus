@@ -1,12 +1,9 @@
 ﻿using NModbus.Data;
-using NModbus.Unme.Common;
 using System;
-using System.Linq;
-using System.Net;
 
 namespace NModbus.Message
 {
-    class WriteFileRecordResponse : AbstractModbusMessageWithData<FileRecordCollection>, IModbusMessage
+    class WriteFileRecordResponse : AbstractModbusMessageWithData<FileRecordDataCollection>, IModbusMessage
     {
         public WriteFileRecordResponse()
         {
@@ -17,10 +14,11 @@ namespace NModbus.Message
         {
         }
 
-        public WriteFileRecordResponse(byte slaveAddress, FileRecordCollection data)
+        public WriteFileRecordResponse(byte slaveAddress, FileRecordDataCollection data)
             : base(slaveAddress, ModbusFunctionCodes.WriteFileRecord)
         {
             Data = data;
+            ByteCount = data.ByteCount;
         }
 
         public override int MinimumFrameSize => 10;
@@ -39,12 +37,12 @@ namespace NModbus.Message
             }
 
             ByteCount = frame[2];
-            Data = new FileRecordCollection(frame);
+            Data = new FileRecordDataCollection(frame);
         }
 
         public override string ToString()
         {
-            string msg = $"Wrote {Data.DataBytes.Count} bytes for file {Data.FileNumber} starting at address {Data.StartingAddress}.";
+            string msg = $"Wrote {Data.DataBytes.Count} bytes for file {Data.FileNumber} starting at address {Data.RecordNumber}.";
             return msg;
         }
     }

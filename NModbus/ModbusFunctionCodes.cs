@@ -24,7 +24,9 @@
         public const byte WriteMultipleCoils = 15;
 
         public const byte WriteMultipleRegisters = 16;
-        
+
+        public const byte ReadFileRecord = 20;
+
         public const byte WriteFileRecord = 21;
 
         public const byte ReadWriteMultipleRegisters = 23;
